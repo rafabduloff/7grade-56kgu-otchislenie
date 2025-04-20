@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список на отчисление - Google Документы</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+        .header {
+            background-color: white;
+            padding: 8px 15px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+        }
+        .doc-title {
+            font-size: 18px;
+            color: #202124;
+            margin-left: 10px;
+        }
+        .google-docs-logo {
+            width: 40px;
+            height: 40px;
+            background-color: #f1f3f4;
+            border-radius: 50%;
+        }
+        .content {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px 40px;
+            background-color: white;
+            min-height: 1100px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+        }
+        .student-list {
+            list-style-type: decimal;
+            line-height: 1.6;
+        }
+        .load-more {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .load-more:hover {
+            background-color: #1557b0;
+        }
+        .jumpscare {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 100vw;
+            z-index: 1000;
+            background: black;
+        }
+
+        video#jumpscare-video {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        video#jumpscare-video::-webkit-media-controls-enclosure {
+            display: none !important;
+        }
+
+        .jumpscare img {
+            display: none;
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="google-docs-logo"></div>
+        <div class="doc-title">Список на отчисление - Google Документы</div>
+    </div>
+
+    <div class="content">
+        <h1>Список учеников на отчисление</h1>
+        <div class="initial-list">
+            <ol class="student-list">
+                <li>Аджимуратов Арсен - 7 "А" класс</li>
+                <li>Ахметов Айдар - 7 "А" класс</li>
+                <li>Балаева Эльза - 7 "А" класс</li>
+                <li>Алдаберген Артур - 7 "Б" класс</li>
+                <li>Асетулы Аслан - 7 "Б" класс</li>
+            </ol>
+        </div>
+        <button class="load-more">Загрузить ещё</button>
+    </div>
+
+    <div class="jumpscare">
+        <video id="jumpscare-video" src="video.mp4" loop></video>
+        <img id="jumpscare-img" src="lightshot.png" alt="">
+    </div>
+
+    <script>
+        let clickCount = 0;
+        const loadMoreBtn = document.querySelector('.load-more');
+        const studentList = document.querySelector('.student-list');
+        const jumpscare = document.querySelector('.jumpscare');
+        const video = document.querySelector('#jumpscare-video');
+        const img = document.querySelector('#jumpscare-img');
+        
+        const additionalStudents = [
+            'Бабкина Таисия - 7 "Б" класс',
+            'Абдирашитов Адам - 7 "Г" класс',
+            'Ермухамет Абай - 7 "Г" класс',
+            'Есенова Алтынай - 7 "Г" класс',
+            'Сейфулин Инсар - 7 "Д" класс'
+        ];
+
+        function requestFullscreen(element) {
+            if(element.requestFullscreen) element.requestFullscreen();
+            else if(element.mozRequestFullScreen) element.mozRequestFullScreen();
+            else if(element.webkitRequestFullscreen) element.webkitRequestFullscreen();
+            else if(element.msRequestFullscreen) element.msRequestFullscreen();
+        }
+
+        loadMoreBtn.addEventListener('click', () => {
+            clickCount++;
+            
+            if (clickCount === 1) {
+                additionalStudents.forEach(student => {
+                    const li = document.createElement('li');
+                    li.textContent = student;
+                    studentList.appendChild(li);
+                });
+            } else if (clickCount === 2) {
+                jumpscare.style.display = 'block';
+                video.play();
+                requestFullscreen(document.documentElement);
+                
+                video.addEventListener('ended', () => {
+                    video.style.display = 'none';
+                    img.style.display = 'block';
+                });
+            }
+        });
+
+        // Prevent leaving the page
+        window.onbeforeunload = function() {
+            if(jumpscare.style.display === 'block') return true;
+        };
+    </script>
+</body>
+</html>
